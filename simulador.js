@@ -6,18 +6,30 @@ const productos = [
     { id: 4, nombre: 'Pan de Molde (XL)', precio: 1500, url: 'https://santaisabel.vtexassets.com/arquivos/ids/161098/Pan-de-molde-blanco-XL-752-g.jpg?v=637469595796130000' }
 ];
 
+// Función para crear las CARDs de los productos
 const crearCard = productos => {
+    let i = 0;
     for (let producto of productos) {
         let card = document.getElementById("cards");
         card.innerHTML += `<div class="card" style="width: 18rem;">
         <img src="${producto.url}" class="card-img-top" alt="...">
-        <div class="card-body">
+        <div class="card-body text-center">
           <h5 class="card-title">${producto.nombre}</h5>
-          <p class="card-text">${producto.precio}</p>
-          <a href="#" class="btn btn-primary" id="botonCoca">Añadir</a>
-        </div>
-      </div>`
+          <p class="card-text">${producto.precio} CLP</p>
+          <a href="#" class="btn btn-primary botonAnadir" marcador="${producto.id}">Añadir</a>
+        </div></div>`;
     }
+    let boton = document.getElementsByClassName('botonAnadir');
+    for (let i= 0 ; i < productos.length; i ++){   
+        boton[i].addEventListener('click', anadir); 
+    }    
+}
+
+
+// Función para añadir productos
+const anadir = (e) => {
+    carrito.push(e.target.getAttribute('marcador'));
+    console.log(carrito);
 }
 
 // Variables Globales para acumular la compra y su monto
@@ -27,24 +39,6 @@ let carrito = [];
 // Función flecha para calcular el IVA (en Chile es el 19%)
 const iva = (a) => a * 1.19;
 
-// Funcion para eliminar productos del carrito y continuar o cortar el ciclo de compra
-function modificarCarrito(respuesta, carrito) {
-    total -= productos.find(productos => (" " + productos.nombre) == carrito[respuesta - 1]).precio;
-    carrito.splice(respuesta - 1, 1);
-}
-
-
-// Función principal del programa
-function carritoDeCompras(nombre) {
-    // Defino las variables total y productos para ir acumulando la compra (tanto el nombre como el costo)
-    let eleccion = 2;
-
-    total += productos[eleccion - 1].precio;
-    carrito.push(" " + productos[eleccion - 1].nombre);
-
-
-    imprimirAHTML(carrito, total, nombre);
-}
 
 const imprimirAHTML = (carrito, total, nombre) => {
     let saludo = document.getElementById("saludo");
@@ -71,4 +65,4 @@ const imprimirAHTML = (carrito, total, nombre) => {
 
 crearCard(productos);
 nombre = prompt("Hola, favor ingrese su nombre: ");
-alert(carritoDeCompras(nombre));
+imprimirAHTML(carrito, total, nombre)
