@@ -17,12 +17,17 @@ const crearCard = productos => {
           <h5 class="card-title">${producto.nombre}</h5>
           <p class="card-text">${producto.precio} CLP</p>
           <a href="#" class="btn btn-primary botonAnadir" marcador="${producto.id}">Añadir</a>
+          <a href="#" class="btn btn-danger botonEliminar" marcador="${producto.id}">Eliminar</a>
         </div></div>`;
     }
     let boton = document.getElementsByClassName('botonAnadir');
     for (let i= 0 ; i < productos.length; i ++){   
         boton[i].addEventListener('click', anadir); 
-    }    
+    }   
+    let boton2 = document.getElementsByClassName('botonEliminar');
+    for (let i= 0 ; i < productos.length; i ++){   
+        boton2[i].addEventListener('click', eliminar); 
+    }     
 }
 
 
@@ -30,6 +35,16 @@ const crearCard = productos => {
 const anadir = (e) => {
     carrito.push(e.target.getAttribute('marcador'));
     console.log(carrito);
+}
+
+const eliminar = (e) => {
+    let marcador = e.target.getAttribute('marcador').toString();
+    let posicion = carrito.indexOf(marcador);
+    if (posicion != -1){
+        carrito.splice(posicion, 1);
+        console.log(carrito);
+    }
+    
 }
 
 // Variables Globales para acumular la compra y su monto
