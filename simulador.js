@@ -56,23 +56,34 @@ const eliminar = (e) => {
 }
 
 // Función para dibujar el carrito
-const imprimirAHTML = (carrito) => {
+const imprimirAHTML = (carro) => {
     let total = 0; 
-    let carroCompras = document.getElementById("carrito");
+    let carroCompras = document.getElementById("miCarrito");
+    let carroReducido = carro.reduce(function(acc, el){
+        acc[el] = (acc[el] || 0) + 1;
+        return acc;
+    }, {});
     carroCompras.innerHTML = "";
-    for (let producto of carrito){
-        let nombreProducto = productos.find(e => e.id === parseInt(producto)).nombre;
-        let precioProducto = productos.find(e => e.id === parseInt(producto)).precio;
-        let fotoProducto = productos.find(e => e.id === parseInt(producto)).url;
-        total += precioProducto
-        carroCompras.innerHTML += `<div class="card" style="width: 6rem;">
+    console.log(Object.keys(carroReducido))
+    for (let ids of Object.keys(carroReducido)){
+        let nombreProducto = productos.find(e => e.id === parseInt(ids)).nombre;
+        let precioProducto = productos.find(e => e.id === parseInt(ids)).precio;
+        let fotoProducto = productos.find(e => e.id === parseInt(ids)).url;
+        let cantidad = carroReducido[ids];
+        total += precioProducto*carroReducido[ids];
+        carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
         <img src="${fotoProducto}" class="card-img-top" alt="...">
         <div class="card-body text-center">
           <h5 class="card-title">${nombreProducto}</h5>
+          <p class="card-text">Cantidad: ${cantidad}</p>
         </div></div>` 
     }
-    console.log(total)
+
+    let valorTotal = document.createElement('nav');
+    valorTotal.innerHTML = `<h4>Valor productos: ${total} </h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
+    miCarrito.appendChild(valorTotal);
 }
+
 let saludo = document.getElementById("saludo");
 nombre = prompt("Hola, favor ingrese su nombre: ");
 saludo.innerHTML += " " + nombre + "!";
