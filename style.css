@@ -8,6 +8,7 @@
 }
 
 .mainIndex{
+    margin-top: 2rem;
     min-height: 70vh;
     width: 100%;
 }
@@ -21,7 +22,7 @@
 }
 
 .mainIndex div nav{
-    height: 70%;
+    min-height: 70%;
 }
 
 .footerIndex{
