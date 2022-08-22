@@ -13,18 +13,32 @@ const productos = [
     { id: 4, nombre: 'Pan de Molde (XL)', precio: 1500, url: 'https://santaisabel.vtexassets.com/arquivos/ids/161098/Pan-de-molde-blanco-XL-752-g.jpg?v=637469595796130000' }
 ];
 
-// Función para crear las CARDs de los productos
-const crearCard = productos => {
-    let i = 0;
-    for (let producto of productos) {
+// Funcion para almacenar productos en storage
+const productosLocal = (clave, valor) => {
+    localStorage.setItem(clave, valor)
+}
+
+// Guardo los productos en el storage
+for (producto of productos) {
+    productosLocal(producto.id, JSON.stringify(producto));
+}
+
+
+// Función para crear las CARDs de los productos, va a buscar la info al storage local
+const crearCard = () => {
+    for (let i = 1; i <= localStorage.length; i++) {
         let card = document.getElementById("cards");
+        let nombre = JSON.parse(localStorage.getItem(i)).nombre;
+        let precio = JSON.parse(localStorage.getItem(i)).precio;
+        let url = JSON.parse(localStorage.getItem(i)).url;
+        let id = JSON.parse(localStorage.getItem(i)).id;
         card.innerHTML += `<div class="card" style="width: 12rem;">
-        <img src="${producto.url}" class="card-img-top" alt="...">
+        <img src="${url}" class="card-img-top" alt="...">
         <div class="card-body text-center align-items-center">
-          <h5 class="card-title">${producto.nombre}</h5>
-          <p class="card-text">${producto.precio} CLP</p>
-          <a href="#" class="btn btn-primary botonAnadir" marcador="${producto.id}">Añadir</a>
-          <a href="#" class="btn btn-danger botonEliminar" marcador="${producto.id}">Eliminar</a>
+          <h5 class="card-title">${nombre}</h5>
+          <p class="card-text">${precio} CLP</p>
+          <a href="#" class="btn btn-primary botonAnadir" marcador="${id}">Añadir</a>
+          <a href="#" class="btn btn-danger botonEliminar" marcador="${id}">Eliminar</a>
         </div></div>`;
     }
     let boton = document.getElementsByClassName('botonAnadir');
@@ -56,7 +70,7 @@ const eliminar = (e) => {
 
 }
 
-// Función para dibujar el carrito
+// Función para dibujar el carrito, busca la info en el storage local
 const imprimirAHTML = (carro) => {
     let total = 0;
     let carroCompras = document.getElementById("miCarrito");
@@ -66,9 +80,9 @@ const imprimirAHTML = (carro) => {
     }, {});
     carroCompras.innerHTML = "";
     for (let ids of Object.keys(carroReducido)) {
-        let nombreProducto = productos.find(e => e.id === parseInt(ids)).nombre;
-        let precioProducto = productos.find(e => e.id === parseInt(ids)).precio;
-        let fotoProducto = productos.find(e => e.id === parseInt(ids)).url;
+        let nombreProducto = JSON.parse(localStorage.getItem(parseInt(ids))).nombre;
+        let precioProducto = JSON.parse(localStorage.getItem(parseInt(ids))).precio;
+        let fotoProducto = JSON.parse(localStorage.getItem(parseInt(ids))).url;
         let cantidad = carroReducido[ids];
         total += precioProducto * carroReducido[ids];
         carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
@@ -92,8 +106,15 @@ const valorCarrito = (total) => {
     miCarrito.appendChild(valorTotal);
 }
 
+
 let saludo = document.getElementById("saludo");
-nombre = prompt("Hola, favor ingrese su nombre: ");
-saludo.innerHTML += " " + nombre + "!";
+if (sessionStorage.getItem('nombre') != null){
+    saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
+} else{
+    nombre = prompt("Hola, favor ingrese su nombre: ");
+    sessionStorage.setItem('nombre', nombre);
+    saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
+}
+
 crearCard(productos);
 
