@@ -20,7 +20,7 @@ const crearCard = productos => {
         let card = document.getElementById("cards");
         card.innerHTML += `<div class="card" style="width: 12rem;">
         <img src="${producto.url}" class="card-img-top" alt="...">
-        <div class="card-body text-center">
+        <div class="card-body text-center align-items-center">
           <h5 class="card-title">${producto.nombre}</h5>
           <p class="card-text">${producto.precio} CLP</p>
           <a href="#" class="btn btn-primary botonAnadir" marcador="${producto.id}">Añadir</a>
@@ -28,13 +28,14 @@ const crearCard = productos => {
         </div></div>`;
     }
     let boton = document.getElementsByClassName('botonAnadir');
-    for (let i= 0 ; i < productos.length; i ++){   
-        boton[i].addEventListener('click', anadir); 
-    }   
+    for (let i = 0; i < productos.length; i++) {
+        boton[i].addEventListener('click', anadir);
+    }
     let boton2 = document.getElementsByClassName('botonEliminar');
-    for (let i= 0 ; i < productos.length; i ++){   
-        boton2[i].addEventListener('click', eliminar); 
-    }     
+    for (let i = 0; i < productos.length; i++) {
+        boton2[i].addEventListener('click', eliminar);
+    }
+    valorCarrito(total);
 }
 
 
@@ -48,39 +49,46 @@ const anadir = (e) => {
 const eliminar = (e) => {
     let marcador = e.target.getAttribute('marcador').toString();
     let posicion = carrito.indexOf(marcador);
-    if (posicion != -1){
+    if (posicion != -1) {
         carrito.splice(posicion, 1);
     }
     imprimirAHTML(carrito);
-    
+
 }
 
 // Función para dibujar el carrito
 const imprimirAHTML = (carro) => {
-    let total = 0; 
+    let total = 0;
     let carroCompras = document.getElementById("miCarrito");
-    let carroReducido = carro.reduce(function(acc, el){
+    let carroReducido = carro.reduce(function (acc, el) {
         acc[el] = (acc[el] || 0) + 1;
         return acc;
     }, {});
     carroCompras.innerHTML = "";
     console.log(Object.keys(carroReducido))
-    for (let ids of Object.keys(carroReducido)){
+    for (let ids of Object.keys(carroReducido)) {
         let nombreProducto = productos.find(e => e.id === parseInt(ids)).nombre;
         let precioProducto = productos.find(e => e.id === parseInt(ids)).precio;
         let fotoProducto = productos.find(e => e.id === parseInt(ids)).url;
         let cantidad = carroReducido[ids];
-        total += precioProducto*carroReducido[ids];
+        total += precioProducto * carroReducido[ids];
         carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
         <img src="${fotoProducto}" class="card-img-top" alt="...">
         <div class="card-body text-center">
           <h5 class="card-title">${nombreProducto}</h5>
           <p class="card-text">Cantidad: ${cantidad}</p>
-        </div></div>` 
+        </div></div>`
     }
+    valorCarrito(total);
+}
 
+const valorCarrito = (total) => {
     let valorTotal = document.createElement('nav');
-    valorTotal.innerHTML = `<h4>Valor productos: ${total} </h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
+    if (total == 0) {
+        valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>'
+    } else {
+        valorTotal.innerHTML = `<h4>Valor productos: ${total} </h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
+    }
     miCarrito.appendChild(valorTotal);
 }
 
