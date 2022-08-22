@@ -65,7 +65,6 @@ const imprimirAHTML = (carro) => {
         return acc;
     }, {});
     carroCompras.innerHTML = "";
-    console.log(Object.keys(carroReducido))
     for (let ids of Object.keys(carroReducido)) {
         let nombreProducto = productos.find(e => e.id === parseInt(ids)).nombre;
         let precioProducto = productos.find(e => e.id === parseInt(ids)).precio;
@@ -82,12 +81,13 @@ const imprimirAHTML = (carro) => {
     valorCarrito(total);
 }
 
+// Función de costos del carrito
 const valorCarrito = (total) => {
     let valorTotal = document.createElement('nav');
     if (total == 0) {
         valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>'
     } else {
-        valorTotal.innerHTML = `<h4>Valor productos: ${total} </h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
+        valorTotal.innerHTML = `<h4>Valor productos: ${total} CLP</h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
     }
     miCarrito.appendChild(valorTotal);
 }
