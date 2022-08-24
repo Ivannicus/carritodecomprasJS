@@ -28,10 +28,7 @@ for (producto of productos) {
 const crearCard = () => {
     for (let i = 1; i <= localStorage.length; i++) {
         let card = document.getElementById("cards");
-        let nombre = JSON.parse(localStorage.getItem(i)).nombre;
-        let precio = JSON.parse(localStorage.getItem(i)).precio;
-        let url = JSON.parse(localStorage.getItem(i)).url;
-        let id = JSON.parse(localStorage.getItem(i)).id;
+        let {id, nombre, precio, url} = JSON.parse(localStorage.getItem(i)); 
         card.innerHTML += `<div class="card" style="width: 12rem;">
         <img src="${url}" class="card-img-top" alt="...">
         <div class="card-body text-center align-items-center">
@@ -80,15 +77,13 @@ const imprimirAHTML = (carro) => {
     }, {});
     carroCompras.innerHTML = "";
     for (let ids of Object.keys(carroReducido)) {
-        let nombreProducto = JSON.parse(localStorage.getItem(parseInt(ids))).nombre;
-        let precioProducto = JSON.parse(localStorage.getItem(parseInt(ids))).precio;
-        let fotoProducto = JSON.parse(localStorage.getItem(parseInt(ids))).url;
+        let {nombre, precio, url} = JSON.parse(localStorage.getItem(parseInt(ids))); 
         let cantidad = carroReducido[ids];
-        total += precioProducto * carroReducido[ids];
+        total += precio * carroReducido[ids];
         carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
-        <img src="${fotoProducto}" class="card-img-top" alt="...">
+        <img src="${url}" class="card-img-top" alt="...">
         <div class="card-body text-center">
-          <h5 class="card-title">${nombreProducto}</h5>
+          <h5 class="card-title">${nombre}</h5>
           <p class="card-text">Cantidad: ${cantidad}</p>
         </div></div>`
     }
@@ -98,11 +93,7 @@ const imprimirAHTML = (carro) => {
 // Función de costos del carrito
 const valorCarrito = (total) => {
     let valorTotal = document.createElement('nav');
-    if (total == 0) {
-        valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>'
-    } else {
-        valorTotal.innerHTML = `<h4>Valor productos: ${total} CLP</h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`
-    }
+    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h4>Valor productos: ${total} CLP</h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`;
     miCarrito.appendChild(valorTotal);
 }
 
