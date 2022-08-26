@@ -28,7 +28,7 @@ for (producto of productos) {
 const crearCard = () => {
     for (let i = 1; i <= localStorage.length; i++) {
         let card = document.getElementById("cards");
-        let {id, nombre, precio, url} = JSON.parse(localStorage.getItem(i)); 
+        let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(i));
         card.innerHTML += `<div class="card" style="width: 12rem;">
         <img src="${url}" class="card-img-top" alt="...">
         <div class="card-body text-center align-items-center">
@@ -52,19 +52,37 @@ const crearCard = () => {
 
 // Función para añadir productos al carrito
 const anadir = (e) => {
-    carrito.push(e.target.getAttribute('marcador'));
+    let id = e.target.getAttribute('marcador');
+    carrito.push(id);
+    let nombre = JSON.parse(localStorage.getItem(parseInt(id))).nombre;
     imprimirAHTML(carrito);
+    Toastify({
+        text: nombre + " añadido",
+        duration: 1500,
+        style: {
+            background: "linear-gradient(to right, #00b09b, #0ba552)",
+        },
+    }).showToast();
 }
 
 // Función para eliminar productos del carrito
 const eliminar = (e) => {
-    let marcador = e.target.getAttribute('marcador').toString();
-    let posicion = carrito.indexOf(marcador);
+    let id = e.target.getAttribute('marcador');
+    let posicion = carrito.indexOf(id.toString());
+    let nombre = JSON.parse(localStorage.getItem(parseInt(id))).nombre;
+    if (carrito.length >= 1) {
+        Toastify({
+            text: nombre + " eliminado",
+            duration: 1500,
+            style: {
+                background: "linear-gradient(to right, #8c0022, #9c0026)",
+            },
+        }).showToast();
+    }
     if (posicion != -1) {
         carrito.splice(posicion, 1);
     }
     imprimirAHTML(carrito);
-
 }
 
 // Función para dibujar el carrito, busca la info en el storage local
@@ -77,7 +95,7 @@ const imprimirAHTML = (carro) => {
     }, {});
     carroCompras.innerHTML = "";
     for (let ids of Object.keys(carroReducido)) {
-        let {nombre, precio, url} = JSON.parse(localStorage.getItem(parseInt(ids))); 
+        let { nombre, precio, url } = JSON.parse(localStorage.getItem(parseInt(ids)));
         let cantidad = carroReducido[ids];
         total += precio * carroReducido[ids];
         carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
@@ -99,13 +117,15 @@ const valorCarrito = (total) => {
 
 
 let saludo = document.getElementById("saludo");
-if (sessionStorage.getItem('nombre') != null){
+if (sessionStorage.getItem('nombre') != null) {
     saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
-} else{
-    nombre = prompt("Hola, favor ingrese su nombre: ");
+} else {
+    let nombre = prompt("Hola, favor ingrese su nombre: ");    
     sessionStorage.setItem('nombre', nombre);
     saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
+    
 }
+
 
 crearCard(productos);
 
