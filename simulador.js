@@ -5,7 +5,7 @@ let carrito = [];
 // Función flecha para calcular el IVA (en Chile es el 19%)
 const iva = (a) => a * 1.19;
 
-// Función para crear las CARDs de los productos, va a buscar la info al storage local
+// Función que recibe la información de los proudctos desde un JSON y las almacena en local storage, además de crear las CARDs
 const crearCard = () => {
     fetch('/productos.json')
         .then((res) => res.json())
@@ -16,6 +16,8 @@ const crearCard = () => {
                 let nombre = producto.nombre;
                 let precio = producto.precio;
                 let url = producto.url;
+                const objeto = {id: id, nombre: nombre, precio: precio, url: url}
+                localStorage.setItem(id, JSON.stringify(objeto))
                 card.innerHTML += `<div class="card" style="width: 12rem;">
         <img src="${url}" class="card-img-top" alt="...">
         <div class="card-body text-center align-items-center">
