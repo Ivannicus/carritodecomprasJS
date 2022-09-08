@@ -1,0 +1,6 @@
+[
+{"id": 1, "nombre": "Coca - Cola (3L)", "precio": 2000, "url": "http://tortasadomicilio.cl/web/productos/catalogo/coca-3lts-600x600.jpg"},
+{"id": 2, "nombre": "Leche (1L)", "precio": 850, "url": "https://jumbo.vtexassets.com/arquivos/ids/410381/Leche-entera-sin-lactosa-1-L.jpg?v=637469373544400000"},
+{"id": 3, "nombre": "Manjar (500g)", "precio": 500, "url": "https://jumbo.vtexassets.com/arquivos/ids/420987/Manjar-El-Manjar-500-g.jpg?v=637510058457630000"},
+{"id": 4, "nombre": "Pan Molde (XL)", "precio": 1500, "url": "https://santaisabel.vtexassets.com/arquivos/ids/161098/Pan-de-molde-blanco-XL-752-g.jpg?v=637469595796130000"}
+]
