@@ -7,7 +7,7 @@ const iva = (a) => a * 1.19;
 
 // Función que recibe la información de los proudctos desde un JSON y las almacena en local storage, además de crear las CARDs
 const crearCard = () => {
-    fetch('/productos.json')
+    fetch('./productos.json')
         .then((res) => res.json())
         .then((data) => {
             data.forEach((producto) => {
