@@ -16,7 +16,7 @@ const crearCard = () => {
                 let nombre = producto.nombre;
                 let precio = producto.precio;
                 let url = producto.url;
-                const objeto = {id: id, nombre: nombre, precio: precio, url: url}
+                const objeto = { id: id, nombre: nombre, precio: precio, url: url }
                 localStorage.setItem(id, JSON.stringify(objeto))
                 card.innerHTML += `<div class="card" style="width: 12rem;">
         <img src="${url}" class="card-img-top" alt="...">
@@ -26,17 +26,17 @@ const crearCard = () => {
           <a href="#" class="btn btn-primary botonAnadir" marcador="${id}">Añadir</a>
           <a href="#" class="btn btn-danger botonEliminar" marcador="${id}">Eliminar</a>
         </div></div>`;
-                
+
             })
             let boton = document.getElementsByClassName('botonAnadir');
-                for (let i = 0; i < data.length; i++) {
-                    boton[i].addEventListener('click', anadir);
-                }
-                let boton2 = document.getElementsByClassName('botonEliminar');
-                for (let i = 0; i < data.length; i++) {
-                    boton2[i].addEventListener('click', eliminar);
-                }
-                valorCarrito(total);
+            for (let i = 0; i < data.length; i++) {
+                boton[i].addEventListener('click', anadir);
+            }
+            let boton2 = document.getElementsByClassName('botonEliminar');
+            for (let i = 0; i < data.length; i++) {
+                boton2[i].addEventListener('click', eliminar);
+            }
+            valorCarrito(total);
         })
 
 }
@@ -61,7 +61,7 @@ const eliminar = (e) => {
     let id = e.target.getAttribute('marcador');
     let posicion = carrito.indexOf(id.toString());
     let nombre = JSON.parse(localStorage.getItem(parseInt(id))).nombre;
-    if (carrito.length >= 1) {
+    if (carrito.length >= 1 && posicion != -1) {
         Toastify({
             text: nombre + " eliminado",
             duration: 1500,
@@ -117,6 +117,38 @@ if (sessionStorage.getItem('nombre') != null) {
 
 }
 
+// Buscador en la página
+
+const buscador = document.querySelector('#buscador');
+const botonBuscar = document.querySelector('#botonBuscar');
+
+const buscar = () => {
+    let card = document.getElementById("cards");
+    card.innerHTML = ``
+    const textoBuscado = buscador.value.toLowerCase();
+    console.log(textoBuscado);
+    for (let i = 1; i < localStorage.length + 1; i++) {
+        console.log(JSON.parse(localStorage.getItem(i)));
+        let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(i));
+        let minus = nombre.toLowerCase();
+        console.log(nombre);
+        if (minus.indexOf(textoBuscado) !== -1) {
+            card.innerHTML += `<div class="card" style="width: 12rem;">
+        <img src="${url}" class="card-img-top" alt="...">
+        <div class="card-body text-center align-items-center">
+          <h5 class="card-title">${nombre}</h5>
+          <p class="card-text">${precio} CLP</p>
+          <a href="#" class="btn btn-primary botonAnadir" marcador="${id}">Añadir</a>
+          <a href="#" class="btn btn-danger botonEliminar" marcador="${id}">Eliminar</a>
+        </div></div>`;
+        }
+    }
+    if (card.innerHTML === ''){
+        card.innerHTML += `<h2>Producto no encontrado 😅</h2>`
+    }
+}
+botonBuscar.addEventListener('click', buscar);
+buscador.addEventListener('keyup', buscar);
 
 crearCard();
 
