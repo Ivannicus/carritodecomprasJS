@@ -3,15 +3,14 @@ let total = 0;
 let carrito = [];
 let buscador = document.querySelector('#buscador');
 let botonBuscar = document.querySelector('#botonBuscar');
+let productos = 0;
+const card = document.getElementById("cards");
+let numeroProductos = document.querySelector('#productos');
 
 // Función flecha para calcular el IVA (en Chile es el 19%)
 const iva = (a) => a * 1.19;
 
-// Buscador en la página
-
-const card = document.getElementById("cards");
-
-// Función que recibe la información de los proudctos desde un JSON y las almacena en local storage, además de crear las CARDs
+// Función que recibe la información de los proudctos desde un JSON y las almacena en local storage, crea las CARDs y hace de buscador
 const crearCard = () => {
     let contador = 0;
     card.innerHTML = '';
@@ -19,7 +18,7 @@ const crearCard = () => {
         .then((res) => res.json())
         .then((data) => {
             data.forEach((producto) => {
-                
+
                 let id = producto.id;
                 let nombre = producto.nombre;
                 let precio = producto.precio;
@@ -34,8 +33,8 @@ const crearCard = () => {
         let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(i));
         let minus = nombre.toLowerCase();
         if (minus.indexOf(textoBuscado) !== -1) {
-            contador ++;
-            card.innerHTML += `<div class="card" style="width: 12rem;">
+            contador++;
+            card.innerHTML += `<div class="card flex-wrap" style="width: 12rem; height: 30rem">
             <img src="${url}" class="card-img-top" alt="...">
             <div class="card-body text-center align-items-center">
               <h5 class="card-title">${nombre}</h5>
@@ -51,13 +50,13 @@ const crearCard = () => {
 
     let boton = document.getElementsByClassName('botonAnadir');
     for (let i = 0; i < contador; i++) {
-        console.log(boton[i]);
         boton[i].addEventListener('click', anadir);
     }
     let boton2 = document.getElementsByClassName('botonEliminar');
     for (let i = 0; i < contador; i++) {
         boton2[i].addEventListener('click', eliminar);
     }
+    numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
     valorCarrito(total);
 
 }
@@ -71,10 +70,13 @@ const anadir = (e) => {
     Toastify({
         text: nombre + " añadido",
         duration: 1500,
+        position: "center",
         style: {
             background: "linear-gradient(to right, #00b09b, #0ba552)",
         },
     }).showToast();
+    productos++;
+    numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
 }
 
 // Función para eliminar productos del carrito
@@ -86,10 +88,13 @@ const eliminar = (e) => {
         Toastify({
             text: nombre + " eliminado",
             duration: 1500,
+            position: "center",
             style: {
                 background: "linear-gradient(to right, #8c0022, #9c0026)",
             },
         }).showToast();
+        productos--;
+        numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
     }
     if (posicion != -1) {
         carrito.splice(posicion, 1);
@@ -123,7 +128,6 @@ const imprimirAHTML = (carro) => {
 // Función de costos del carrito
 let valorTotal = document.createElement('nav');
 const valorCarrito = (total) => {
-    
     total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h4>Valor productos: ${total} CLP</h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`;
     miCarrito.appendChild(valorTotal);
 }
@@ -139,37 +143,10 @@ if (sessionStorage.getItem('nombre') != null) {
 
 }
 
-// Buscador en la página
-// const buscador = document.querySelector('#buscador');
-// const botonBuscar = document.querySelector('#botonBuscar');
-
-// const buscar = () => {
-//     let card = document.getElementById("cards");
-//     card.innerHTML = ``
-//     const textoBuscado = buscador.value.toLowerCase();
-//     console.log(textoBuscado);
-//     for (let i = 1; i < localStorage.length + 1; i++) {
-//         console.log(JSON.parse(localStorage.getItem(i)));
-//         let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(i));
-//         let minus = nombre.toLowerCase();
-//         console.log(nombre);
-//         if (minus.indexOf(textoBuscado) !== -1) {
-//             card.innerHTML += `<div class="card" style="width: 12rem;">
-//         <img src="${url}" class="card-img-top" alt="...">
-//         <div class="card-body text-center align-items-center">
-//           <h5 class="card-title">${nombre}</h5>
-//           <p class="card-text">${precio} CLP</p>
-//           <a href="#" class="btn btn-primary botonAnadir" marcador="${id}">Añadir</a>
-//           <a href="#" class="btn btn-danger botonEliminar" marcador="${id}">Eliminar</a>
-//         </div></div>`;
-//         }
-//     }
-//     if (card.innerHTML === ''){
-//         card.innerHTML += `<h2>Producto no encontrado 😅</h2>`
-//     }
-// }
 botonBuscar.addEventListener('click', crearCard);
 buscador.addEventListener('keyup', crearCard);
 
 crearCard();
+
+
 

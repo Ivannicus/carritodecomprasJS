@@ -21,18 +21,30 @@
                     <img src="./img/logo.png" alt="" width="100" height="100">
                     La Mezclilla
                 </a>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="text" placeholder="Busca un producto" id="buscador">
-                    <button class="btn btn-info text-white" id="botonBuscar" type="submit">Buscar</button>
-                </form>
+                <div>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="text" placeholder="Busca un producto" id="buscador">
+                        <button class="btn btn-info text-white" id="botonBuscar" type="submit">Buscar</button>
+                    </form>
+                    <ul class="navbar-right">
+                        <li>
+                            <a href="#" id="cart">
+                                <i class="fa fa-shopping-cart"></i>Carro
+                                <span class="badge badge-light">
+                                    <p id="productos"></p>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
     </header>
     <main class="mainIndex d-flex row">
-        <div class="d-flex row col-8 align-items-center">
+        <div class="d-flex row col-12 align-items-center">
             <h1 class="text-center" id="saludo">¡Bienvenid@</h1>
             <h3 class="text-center">Productos Disponibles</h3>
-            <nav class="d-flex justify-content-evenly" id="cards"></nav>
+            <nav class="d-flex justify-content-evenly align-items-center flex-wrap" id="cards"></nav>
         </div>
         <div class="col-4">
             <h2 class="text-center">Tu carrito: </h2>
