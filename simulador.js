@@ -1,4 +1,4 @@
-// Variables Globales para acumular la compra y su monto
+// Variables Globales para acumular la compra y su monto, así como para definir variables DOM
 let total = 0;
 let carrito = [];
 let buscador = document.querySelector('#buscador');
@@ -29,7 +29,7 @@ const crearCard = () => {
                 localStorage.setItem(id, JSON.stringify(objeto))
             })
         })
-
+    // Aprovechamos la funcion buscador para crear las CARDs y no duplicar código
     const textoBuscado = buscador.value.toLowerCase();
     for (let i = 1; i < localStorage.length + 1; i++) {
         let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(i));
@@ -119,7 +119,7 @@ const imprimirAHTML = (carro) => {
         let cantidad = carroReducido[ids];
         total += precio * carroReducido[ids];
         productosCarrito.innerHTML += 
-        `<div class="d-flex column no-gutters">
+        `<div class="d-flex column no-gutters justify-content-around">
                 <img src="${url}" style="width: 4rem; margin-top: 0.2rem" alt="">
                 <div class="card-body text-center align-items-center">
                     <h5>${nombre}</h5>
@@ -134,11 +134,11 @@ const imprimirAHTML = (carro) => {
 // Función de costos del carrito
 let valorTotal = document.createElement('nav');
 const valorCarrito = (total) => {
-    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h5>Total (+IVA): ${iva(total)} CLP</h5>`;
+    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h5 class="text-center">Total (+IVA): ${iva(total)} CLP</h5>`;
     productosCarrito.appendChild(valorTotal);
 }
 
-
+// Saludo inicial de la página web, almacenando el nombre en el almacenamiento de la sesión
 let saludo = document.getElementById("saludo");
 if (sessionStorage.getItem('nombre') != null) {
     saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
@@ -149,6 +149,7 @@ if (sessionStorage.getItem('nombre') != null) {
 
 }
 
+// Añadimos los eventos de escuchar para el buscador de la página web
 botonBuscar.addEventListener('click', crearCard);
 buscador.addEventListener('keyup', crearCard);
 
