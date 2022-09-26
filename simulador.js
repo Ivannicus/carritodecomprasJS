@@ -6,6 +6,8 @@ let botonBuscar = document.querySelector('#botonBuscar');
 let productos = 0;
 const card = document.getElementById("cards");
 let numeroProductos = document.querySelector('#productos');
+let valorProductos = document.querySelector('#valorTotal');
+let productosCarrito = document.querySelector('#productosCarrito');
 
 // Función flecha para calcular el IVA (en Chile es el 19%)
 const iva = (a) => a * 1.19;
@@ -56,7 +58,7 @@ const crearCard = () => {
     for (let i = 0; i < contador; i++) {
         boton2[i].addEventListener('click', eliminar);
     }
-    numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
+    numeroProductos.innerHTML = `${productos.toString()}`;
     valorCarrito(total);
 
 }
@@ -76,7 +78,7 @@ const anadir = (e) => {
         },
     }).showToast();
     productos++;
-    numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
+    numeroProductos.innerHTML = `${productos.toString()}`;
 }
 
 // Función para eliminar productos del carrito
@@ -94,7 +96,7 @@ const eliminar = (e) => {
             },
         }).showToast();
         productos--;
-        numeroProductos.innerHTML = `<p>${productos.toString()}</p>`
+        numeroProductos.innerHTML = `${productos.toString()}`;
     }
     if (posicion != -1) {
         carrito.splice(posicion, 1);
@@ -102,25 +104,29 @@ const eliminar = (e) => {
     imprimirAHTML(carrito);
 }
 
+
+  
 // Función para dibujar el carrito, busca la info en el storage local
 const imprimirAHTML = (carro) => {
     let total = 0;
-    let carroCompras = document.getElementById("miCarrito");
     let carroReducido = carro.reduce(function (acc, el) {
         acc[el] = (acc[el] || 0) + 1;
         return acc;
     }, {});
-    carroCompras.innerHTML = "";
+    productosCarrito.innerHTML = "";
     for (let ids of Object.keys(carroReducido)) {
         let { nombre, precio, url } = JSON.parse(localStorage.getItem(parseInt(ids)));
         let cantidad = carroReducido[ids];
         total += precio * carroReducido[ids];
-        carroCompras.innerHTML += `<div class="card" style="width: 8rem;">
-        <img src="${url}" class="card-img-top" alt="...">
-        <div class="card-body text-center">
-          <h5 class="card-title">${nombre}</h5>
-          <p class="card-text">Cantidad: ${cantidad}</p>
-        </div></div>`
+        productosCarrito.innerHTML += 
+        `<div class="d-flex column no-gutters">
+                <img src="${url}" style="width: 4rem; margin-top: 0.2rem" alt="">
+                <div class="card-body text-center align-items-center">
+                    <h5>${nombre}</h5>
+                    <p>Cantidad: ${cantidad}</p>
+                    <p>Precio: ${precio*cantidad}</p>
+                </div>
+            </div>`
     }
     valorCarrito(total);
 }
@@ -128,8 +134,8 @@ const imprimirAHTML = (carro) => {
 // Función de costos del carrito
 let valorTotal = document.createElement('nav');
 const valorCarrito = (total) => {
-    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h4>Valor productos: ${total} CLP</h4>\n<h3>Total a pagar (IVA incluido): ${iva(total)} CLP</h3>`;
-    miCarrito.appendChild(valorTotal);
+    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h5>Total (+IVA): ${iva(total)} CLP</h5>`;
+    productosCarrito.appendChild(valorTotal);
 }
 
 
@@ -147,6 +153,7 @@ botonBuscar.addEventListener('click', crearCard);
 buscador.addEventListener('keyup', crearCard);
 
 crearCard();
+
 
 
 

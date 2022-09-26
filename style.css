@@ -12,20 +12,22 @@
     float: right;
 }
 
-ul li{
-        display: flex;
-        width: 100%;
-        margin-top: 1.5rem;
-        margin-right: .5rem;
+ul li {
+    display: flex;
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-right: .5rem;
 }
+
 ul li a {
-            color: white;
-            text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
 ul li a:hover {
-                color: black;
+    color: black;
 }
+
 .badge {
     background-color: #6394F8;
     border-radius: 10px;
@@ -37,8 +39,23 @@ ul li a:hover {
     vertical-align: middle;
 }
 
-ul li a span p{
+ul li a span p {
     margin: 0;
+}
+
+.shopping-cart {
+    margin: 20px 0;
+    float: right;
+    background: white;
+    width: 320px;
+    position: relative;
+    border-radius: 3px;
+    padding: 20px;
+}
+
+.dropdown-menu {
+    --bs-dropdown-min-width: 20rem;
+    margin:-13rem;
 }
 
 .mainIndex {
