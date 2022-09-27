@@ -36,13 +36,12 @@ const crearCard = () => {
         let minus = nombre.toLowerCase();
         if (minus.indexOf(textoBuscado) !== -1) {
             contador++;
-            card.innerHTML += `<div class="card flex-wrap" style="width: 12rem; height: 30rem">
+            card.innerHTML += `<div class="card flex-wrap m-2" style="width: 12rem; height: 27rem">
             <img src="${url}" class="card-img-top" alt="...">
             <div class="card-body text-center align-items-center">
               <h5 class="card-title">${nombre}</h5>
               <p class="card-text">${precio} CLP</p>
               <a href="#" class="btn btn-primary botonAnadir" marcador="${id}">Añadir</a>
-              <a href="#" class="btn btn-danger botonEliminar" marcador="${id}">Eliminar</a>
             </div></div>`;
         }
     }
@@ -53,13 +52,11 @@ const crearCard = () => {
     let boton = document.getElementsByClassName('botonAnadir');
     for (let i = 0; i < contador; i++) {
         boton[i].addEventListener('click', anadir);
-    }
-    let boton2 = document.getElementsByClassName('botonEliminar');
-    for (let i = 0; i < contador; i++) {
-        boton2[i].addEventListener('click', eliminar);
+        boton[i].addEventListener("click", function(e) {
+            e.stopPropagation();
+          });
     }
     numeroProductos.innerHTML = `${productos.toString()}`;
-    valorCarrito(total);
 
 }
 
@@ -108,6 +105,7 @@ const eliminar = (e) => {
   
 // Función para dibujar el carrito, busca la info en el storage local
 const imprimirAHTML = (carro) => {
+    let contador = 0;
     let total = 0;
     let carroReducido = carro.reduce(function (acc, el) {
         acc[el] = (acc[el] || 0) + 1;
@@ -115,26 +113,54 @@ const imprimirAHTML = (carro) => {
     }, {});
     productosCarrito.innerHTML = "";
     for (let ids of Object.keys(carroReducido)) {
-        let { nombre, precio, url } = JSON.parse(localStorage.getItem(parseInt(ids)));
+        let { id, nombre, precio, url } = JSON.parse(localStorage.getItem(parseInt(ids)));
         let cantidad = carroReducido[ids];
         total += precio * carroReducido[ids];
         productosCarrito.innerHTML += 
-        `<div class="d-flex column no-gutters justify-content-around">
+        `<div class="d-flex column no-gutters justify-content-around m-2">
                 <img src="${url}" style="width: 4rem; margin-top: 0.2rem" alt="">
                 <div class="card-body text-center align-items-center">
                     <h5>${nombre}</h5>
                     <p>Cantidad: ${cantidad}</p>
                     <p>Precio: ${precio*cantidad}</p>
                 </div>
-            </div>`
+                <div class="d-flex column align-items-center">
+                    <a href="#" class="btn btn-primary botonAnadir m-1" marcador="${id}">+</a>
+                    <a href="#" class="btn btn-danger botonEliminar m-1" marcador="${id}">-</a>
+                </div>
+            </div>`;
+        contador ++;
+    }
+    let boton = document.getElementsByClassName('botonAnadir');
+    for (let i = 0; i < contador; i++) {
+        boton[i].addEventListener('click', anadir);
+        boton[i].addEventListener("click", function(e) {
+            e.stopPropagation();
+          });
+    }
+    let boton2 = document.getElementsByClassName('botonEliminar');
+    for (let i = 0; i < contador; i++) {
+        boton2[i].addEventListener('click', eliminar);
+        boton2[i].addEventListener("click", function(e) {
+            e.stopPropagation();
+          });
     }
     valorCarrito(total);
 }
 
+const vaciarCarro = () => {
+    carrito = [];
+    imprimirAHTML(carrito);
+}
 // Función de costos del carrito
 let valorTotal = document.createElement('nav');
 const valorCarrito = (total) => {
-    total == 0 ? valorTotal.innerHTML = '<h4>Tu carrito está vacío, agrega un producto que desees comprar</h4>' : valorTotal.innerHTML = `<h5 class="text-center">Total (+IVA): ${iva(total)} CLP</h5>`;
+    if (total == 0){
+        productosCarrito.innerHTML = '';
+        valorTotal.innerHTML = '<h6 class="text-center">Carrito vacío ☹. ¡Añade algo!</h6>' 
+    } else {
+        valorTotal.innerHTML = `<h5 class="text-center">Total (+IVA): ${iva(total)} CLP</h5>`;
+    }   
     productosCarrito.appendChild(valorTotal);
 }
 
@@ -148,6 +174,21 @@ if (sessionStorage.getItem('nombre') != null) {
     saludo.innerHTML += " " + sessionStorage.getItem('nombre') + "!";
 
 }
+
+let botonSuscribir = document.querySelector('#suscribete')
+botonSuscribir.addEventListener("click", function() {
+    Toastify({
+        text: "¡Gracias por suscribirte!",
+        duration: 1500,
+        position: "center",
+        style: {
+            color: "black",
+            background: "linear-gradient(to right, #00FFFF, #7FFFD4)",
+        },
+    }).showToast();
+  });
+
+
 
 // Añadimos los eventos de escuchar para el buscador de la página web
 botonBuscar.addEventListener('click', crearCard);

@@ -3,6 +3,9 @@
     padding: 0;
 }
 
+.d-flex{
+    justify-content: center;
+}
 
 .headerIndex {
     height: 15vh;
