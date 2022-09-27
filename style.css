@@ -58,8 +58,8 @@ ul li a span p {
 }
 
 .dropdown-menu {
-    --bs-dropdown-min-width: 20rem;
-    margin:-13rem;
+    --bs-dropdown-min-width: 21rem;
+    margin:-14rem;
 }
 
 .mainIndex {
